@@ -8,6 +8,7 @@ from hf_core_lab.models.metadata import (
     ModelMetadata,
     SpaceMetadata,
 )
+from hf_core_lab.models.monetization import MonetizationEngine, QuotaTier, UsageBillingReport
 from hf_core_lab.models.reports import ReportGenerator
 
 __all__ = [
@@ -16,4 +17,7 @@ __all__ = [
     "SpaceMetadata",
     "CardValidationResult",
     "ReportGenerator",
+    "MonetizationEngine",
+    "QuotaTier",
+    "UsageBillingReport",
 ]

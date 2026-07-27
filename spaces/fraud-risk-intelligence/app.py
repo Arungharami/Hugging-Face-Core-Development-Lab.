@@ -1,8 +1,8 @@
 """
-Gradio Application: Explainable Fraud Risk Intelligence.
+Gradio Application: Explainable Fraud Risk Intelligence (Commercial Tier Edition).
 
 Implements transparent financial risk probability, non-accusatory advisories,
-confidence scores, and visual feature attribution breakdowns.
+confidence scores, visual feature attributions, and commercial API key tiering.
 """
 
 import gradio as gr
@@ -14,8 +14,15 @@ def evaluate_fraud_risk(
     failed_pin_attempts: int,
     account_age_days: int,
     channel: str,
+    api_tier: str = "Free Demo",
+    api_key: str = "",
 ):
     """Process input transaction features and calculate non-accusatory risk assessment."""
+
+    # Calculate commercial billing estimation
+    is_pro = api_tier == "Pro Tier (Commercial API)" and api_key.startswith("hflab_pro_")
+    tier_label = "Pro Tier ($0.005/request)" if is_pro else "Free Demo (Quota: 100/day)"
+    estimated_cost = "$0.005 USD" if is_pro else "$0.000 USD (Free)"
 
     # Baseline heuristic risk calculation for decision support demonstration
     amount_factor = min(1.0, transaction_amount / 10000.0) * 0.35
@@ -56,6 +63,8 @@ def evaluate_fraud_risk(
 
     explanation_text = (
         f"### Statistical Risk Analysis Summary\n"
+        f"- **Service Tier:** `{tier_label}`\n"
+        f"- **Request Billing:** `{estimated_cost}`\n"
         f"- **Calculated Risk Probability:** `{risk_score * 100:.1f}%`\n"
         f"- **Model Confidence Score:** `{confidence}%`\n"
         f"- **Assigned Classification:** `{risk_category}`\n\n"
@@ -83,13 +92,25 @@ def build_interface():
         gr.Markdown(
             """
             # 🛡️ Explainable Fraud Risk Intelligence Laboratory
-            ### Decision Support & Risk Analysis Engine for Financial Operations
+            ### Decision Support & Commercial Risk Analysis Engine
             *Powered by Hugging Face Core Development Lab | Author: **Arun Kumar Gharami***
             """
         )
 
         with gr.Row():
             with gr.Column(scale=1):
+                gr.Markdown("### 🔑 API Key & Service Tier")
+                api_tier_input = gr.Radio(
+                    choices=["Free Demo", "Pro Tier (Commercial API)"],
+                    value="Free Demo",
+                    label="Service Tier Selection",
+                )
+                api_key_input = gr.Textbox(
+                    label="Pro API Key (Optional for Commercial Tier)",
+                    placeholder="hflab_pro_...",
+                    type="password",
+                )
+
                 gr.Markdown("### 📥 Input Transaction Data")
                 amount_input = gr.Number(label="Transaction Amount ($)", value=2500.0, minimum=0.0)
                 foreign_input = gr.Checkbox(label="Cross-Border / Foreign Country Transaction", value=True)
@@ -112,17 +133,33 @@ def build_interface():
 
         submit_btn.click(
             fn=evaluate_fraud_risk,
-            inputs=[amount_input, foreign_input, pin_input, age_input, channel_input],
+            inputs=[
+                amount_input,
+                foreign_input,
+                pin_input,
+                age_input,
+                channel_input,
+                api_tier_input,
+                api_key_input,
+            ],
             outputs=[category_output, probability_output, explanation_output, breakdown_output],
         )
 
         gr.Examples(
             examples=[
-                [45.50, False, 0, 365, "POS Terminal"],
-                [4500.00, True, 1, 90, "Online Web"],
-                [12500.00, True, 3, 7, "Mobile App"],
+                [45.50, False, 0, 365, "POS Terminal", "Free Demo", ""],
+                [4500.00, True, 1, 90, "Online Web", "Pro Tier (Commercial API)", "hflab_pro_sample123"],
+                [12500.00, True, 3, 7, "Mobile App", "Pro Tier (Commercial API)", "hflab_pro_sample123"],
             ],
-            inputs=[amount_input, foreign_input, pin_input, age_input, channel_input],
+            inputs=[
+                amount_input,
+                foreign_input,
+                pin_input,
+                age_input,
+                channel_input,
+                api_tier_input,
+                api_key_input,
+            ],
         )
 
     return demo
