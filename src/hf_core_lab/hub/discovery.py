@@ -41,7 +41,6 @@ class HubDiscoveryEngine:
                 pipeline_tag=task,
                 limit=limit,
                 sort=sort,
-                direction=direction,
                 full=False,
             )
 
