@@ -1,0 +1,3 @@
+"""
+Space application tests module.
+"""
