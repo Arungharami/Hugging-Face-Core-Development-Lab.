@@ -3,16 +3,19 @@ Report generation utilities for export into JSON and Markdown formats.
 """
 
 import json
-from typing import Any, List, Union
+from typing import Any
 
-from hf_core_lab.models.metadata import CardValidationResult, DatasetMetadata, ModelMetadata, SpaceMetadata
+from hf_core_lab.models.metadata import (
+    CardValidationResult,
+    ModelMetadata,
+)
 
 
 class ReportGenerator:
     """Formatter for exporting discovery and validation outputs."""
 
     @staticmethod
-    def to_json(data: Union[List[Any], Any], indent: int = 2) -> str:
+    def to_json(data: list[Any] | Any, indent: int = 2) -> str:
         """Serialize metadata dataclass instances or dict lists into formatted JSON string."""
         if isinstance(data, list):
             serialized = [item.to_dict() if hasattr(item, "to_dict") else item for item in data]
@@ -23,7 +26,7 @@ class ReportGenerator:
         return json.dumps(serialized, indent=indent, default=str)
 
     @staticmethod
-    def models_to_markdown(models: List[ModelMetadata], title: str = "Hub Model Discovery Report") -> str:
+    def models_to_markdown(models: list[ModelMetadata], title: str = "Hub Model Discovery Report") -> str:
         """Format list of ModelMetadata into a markdown report table."""
         lines = [
             f"# {title}",
@@ -42,7 +45,7 @@ class ReportGenerator:
         return "\n".join(lines)
 
     @staticmethod
-    def validation_to_markdown(results: List[CardValidationResult], title: str = "Metadata Compliance Audit Report") -> str:
+    def validation_to_markdown(results: list[CardValidationResult], title: str = "Metadata Compliance Audit Report") -> str:
         """Format list of CardValidationResults into markdown report."""
         lines = [
             f"# {title}",

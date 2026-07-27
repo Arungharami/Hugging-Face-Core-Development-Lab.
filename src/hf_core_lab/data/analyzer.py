@@ -6,7 +6,7 @@ class distribution checking, train/val/test data leakage checks, and split utili
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple
+
 import numpy as np
 import pandas as pd
 
@@ -22,13 +22,13 @@ class DatasetQualityReport:
 
     total_rows: int
     total_columns: int
-    missing_value_counts: Dict[str, int]
-    missing_value_ratios: Dict[str, float]
+    missing_value_counts: dict[str, int]
+    missing_value_ratios: dict[str, float]
     duplicate_rows: int
     duplicate_ratio: float
-    class_distribution: Dict[str, int]
-    class_ratios: Dict[str, float]
-    potential_leakage_columns: List[str] = field(default_factory=list)
+    class_distribution: dict[str, int]
+    class_ratios: dict[str, float]
+    potential_leakage_columns: list[str] = field(default_factory=list)
 
     def is_clean(self, max_missing_ratio: float = 0.05, max_duplicate_ratio: float = 0.01) -> bool:
         """Check if dataset quality metrics pass threshold standards."""
@@ -41,7 +41,7 @@ class DatasetAnalyzer:
     """Quality analyzer for tabular DataFrames."""
 
     @staticmethod
-    def analyze(df: pd.DataFrame, target_column: Optional[str] = None) -> DatasetQualityReport:
+    def analyze(df: pd.DataFrame, target_column: str | None = None) -> DatasetQualityReport:
         """Perform comprehensive quality analysis on a pandas DataFrame."""
         if df.empty:
             raise ValidationError("Cannot analyze an empty DataFrame.")
@@ -53,8 +53,8 @@ class DatasetAnalyzer:
         duplicates = int(df.duplicated().sum())
         duplicate_ratio = round(duplicates / total_rows, 4)
 
-        class_dist: Dict[str, int] = {}
-        class_ratios: Dict[str, float] = {}
+        class_dist: dict[str, int] = {}
+        class_ratios: dict[str, float] = {}
         if target_column and target_column in df.columns:
             counts = df[target_column].value_counts().to_dict()
             class_dist = {str(k): int(v) for k, v in counts.items()}
@@ -86,7 +86,7 @@ class DatasetAnalyzer:
         val_ratio: float = 0.15,
         test_ratio: float = 0.15,
         random_seed: int = 42,
-    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """Perform reproducible train, validation, and test split."""
         if not np.isclose(train_ratio + val_ratio + test_ratio, 1.0):
             raise ValidationError("Split ratios must sum to 1.0.")

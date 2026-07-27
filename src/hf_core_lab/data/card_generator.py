@@ -5,7 +5,6 @@ Generates HF-compliant Markdown Dataset Cards with explicit licensing,
 intended use, limitations, sensitive attributes, potential biases, and prohibited uses.
 """
 
-from typing import Dict, Optional
 from hf_core_lab.data.analyzer import DatasetQualityReport
 
 
@@ -18,7 +17,7 @@ class DatasetCardGenerator:
         report: DatasetQualityReport,
         license_name: str = "mit",
         author: str = "Arun Kumar Gharami",
-        description: Optional[str] = None,
+        description: str | None = None,
     ) -> str:
         """Generate Hugging Face Dataset Card YAML frontmatter and markdown body."""
         desc = description or "Audited synthetic financial transactions dataset for risk pattern decision support."
@@ -61,7 +60,7 @@ pretty_name: {dataset_name}
             ratio = report.class_ratios.get(cls, 0.0) * 100
             card_text += f"| `{cls}` | {count:,} | {ratio:.2f}% |\n"
 
-        card_text += f"""
+        card_text += """
 ## Ethical Use & Governance Specification
 
 ### 1. Data Source & Provenance

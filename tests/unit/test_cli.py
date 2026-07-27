@@ -2,9 +2,10 @@
 Unit tests for hf-core-lab CLI parser and subcommands.
 """
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
+
 from hf_core_lab.cli import build_parser, main
-from hf_core_lab.models.metadata import CardValidationResult, DatasetMetadata, ModelMetadata, SpaceMetadata
+from hf_core_lab.models.metadata import DatasetMetadata, ModelMetadata, SpaceMetadata
 
 
 def test_build_parser():

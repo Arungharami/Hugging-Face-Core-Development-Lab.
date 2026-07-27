@@ -2,7 +2,8 @@
 Hugging Face Hub API Client Wrapper.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
+
 from huggingface_hub import HfApi
 from huggingface_hub.utils import HfHubHTTPError
 
@@ -16,11 +17,11 @@ logger = setup_logger("hf_core_lab.hub.client")
 class HfHubClient:
     """Wrapper around huggingface_hub.HfApi providing error mapping and auth state."""
 
-    def __init__(self, config: Optional[LabConfig] = None, api: Optional[HfApi] = None):
+    def __init__(self, config: LabConfig | None = None, api: HfApi | None = None):
         self.config = config or LabConfig()
         self.api = api or HfApi(token=self.config.token)
 
-    def whoami(self) -> Dict[str, Any]:
+    def whoami(self) -> dict[str, Any]:
         """Verify current authentication status and user details."""
         if not self.config.token:
             logger.warning("No HF_TOKEN found in configuration; checking anonymous or cached token status.")

@@ -5,9 +5,7 @@ Extracts feature importance scores and generates human-readable advisories for t
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Any
-import numpy as np
-import pandas as pd
+from typing import Any
 
 
 @dataclass
@@ -16,23 +14,23 @@ class ExplanationReport:
 
     risk_probability: float
     risk_category: str
-    feature_attributions: Dict[str, float]
+    feature_attributions: dict[str, float]
     advisory: str
 
     def to_markdown(self) -> str:
         """Format explanation into a readable markdown report."""
         lines = [
-            f"### Explainable Risk Advisory Report",
+            "### Explainable Risk Advisory Report",
             f"- **Statistical Risk Score:** `{self.risk_probability * 100:.1f}%`",
             f"- **Category:** `{self.risk_category}`",
-            f"",
-            f"#### Feature Contributions:",
+            "",
+            "#### Feature Contributions:",
         ]
         for feature, val in self.feature_attributions.items():
             lines.append(f" - **{feature}:** `{val:.2f}%`")
         lines.extend([
-            f"",
-            f"#### Advisory Note:",
+            "",
+            "#### Advisory Note:",
             f"> {self.advisory}",
         ])
         return "\n".join(lines)
@@ -43,14 +41,14 @@ class FeatureExplainer:
 
     @staticmethod
     def explain_instance(
-        features: Dict[str, Any],
-        model_coefficients: Dict[str, float],
+        features: dict[str, Any],
+        model_coefficients: dict[str, float],
         risk_probability: float,
     ) -> ExplanationReport:
         """Generate feature attributions and advisory for a single transaction instance."""
 
         # Calculate relative feature attributions
-        attributions: Dict[str, float] = {}
+        attributions: dict[str, float] = {}
         total_score = 0.0
 
         for key, weight in model_coefficients.items():

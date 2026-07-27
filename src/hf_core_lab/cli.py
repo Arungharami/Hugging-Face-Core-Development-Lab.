@@ -4,7 +4,6 @@ Command-Line Interface for Hugging Face Core Development Lab (`hf-core-lab`).
 
 import argparse
 import sys
-from typing import Optional
 
 from hf_core_lab.config import LabConfig
 from hf_core_lab.hub.client import HfHubClient
@@ -26,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Command: whoami
-    whoami_parser = subparsers.add_parser("whoami", help="Check Hugging Face Hub authentication status")
+    subparsers.add_parser("whoami", help="Check Hugging Face Hub authentication status")
 
     # Command: discover
     discover_parser = subparsers.add_parser("discover", help="Search models, datasets, or Spaces on the Hub")
@@ -46,7 +45,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(args: Optional[list] = None) -> int:
+def main(args: list | None = None) -> int:
     """Main CLI entrypoint."""
     parser = build_parser()
     parsed = parser.parse_args(args)
@@ -71,27 +70,27 @@ def main(args: Optional[list] = None) -> int:
     elif parsed.command == "discover":
         engine = HubDiscoveryEngine(config=config)
         if parsed.type == "model":
-            results = engine.search_models(query=parsed.query, author=parsed.author, task=parsed.task, limit=parsed.limit)
+            model_results = engine.search_models(query=parsed.query, author=parsed.author, task=parsed.task, limit=parsed.limit)
             if parsed.format == "json":
-                out = ReportGenerator.to_json(results)
+                out = ReportGenerator.to_json(model_results)
             elif parsed.format == "markdown":
-                out = ReportGenerator.models_to_markdown(results)
+                out = ReportGenerator.models_to_markdown(model_results)
             else:
-                out = f"Found {len(results)} model(s):\n" + "\n".join(f" - {m.model_id} (downloads={m.downloads:,})" for m in results)
+                out = f"Found {len(model_results)} model(s):\n" + "\n".join(f" - {m.model_id} (downloads={m.downloads:,})" for m in model_results)
 
         elif parsed.type == "dataset":
-            results = engine.search_datasets(query=parsed.query, author=parsed.author, limit=parsed.limit)
+            dataset_results = engine.search_datasets(query=parsed.query, author=parsed.author, limit=parsed.limit)
             if parsed.format == "json":
-                out = ReportGenerator.to_json(results)
+                out = ReportGenerator.to_json(dataset_results)
             else:
-                out = f"Found {len(results)} dataset(s):\n" + "\n".join(f" - {d.dataset_id} (downloads={d.downloads:,})" for d in results)
+                out = f"Found {len(dataset_results)} dataset(s):\n" + "\n".join(f" - {d.dataset_id} (downloads={d.downloads:,})" for d in dataset_results)
 
         elif parsed.type == "space":
-            results = engine.search_spaces(query=parsed.query, author=parsed.author, limit=parsed.limit)
+            space_results = engine.search_spaces(query=parsed.query, author=parsed.author, limit=parsed.limit)
             if parsed.format == "json":
-                out = ReportGenerator.to_json(results)
+                out = ReportGenerator.to_json(space_results)
             else:
-                out = f"Found {len(results)} space(s):\n" + "\n".join(f" - {s.space_id} (sdk={s.sdk})" for s in results)
+                out = f"Found {len(space_results)} space(s):\n" + "\n".join(f" - {s.space_id} (sdk={s.sdk})" for s in space_results)
 
         print(out)
         if parsed.output:

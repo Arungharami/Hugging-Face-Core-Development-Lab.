@@ -2,7 +2,6 @@
 Card & Metadata Validators for ModelCards and DatasetCards.
 """
 
-from typing import List, Optional
 from hf_core_lab.models.metadata import CardValidationResult, DatasetMetadata, ModelMetadata
 
 
@@ -12,8 +11,8 @@ class CardValidator:
     @staticmethod
     def validate_model_metadata(model: ModelMetadata) -> CardValidationResult:
         """Validate metadata compliance for a ModelMetadata object."""
-        missing: List[str] = []
-        warnings: List[str] = []
+        missing: list[str] = []
+        warnings: list[str] = []
 
         if not model.license:
             missing.append("license")
@@ -36,8 +35,8 @@ class CardValidator:
     @staticmethod
     def validate_dataset_metadata(dataset: DatasetMetadata) -> CardValidationResult:
         """Validate metadata compliance for a DatasetMetadata object."""
-        missing: List[str] = []
-        warnings: List[str] = []
+        missing: list[str] = []
+        warnings: list[str] = []
 
         if not dataset.license:
             missing.append("license")

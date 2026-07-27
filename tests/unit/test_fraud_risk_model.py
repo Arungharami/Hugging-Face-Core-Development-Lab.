@@ -3,9 +3,10 @@ Unit tests for FraudRiskClassifier and FeatureExplainer.
 """
 
 import pytest
+
 from hf_core_lab.data.analyzer import DatasetAnalyzer
 from hf_core_lab.data.generator import SyntheticFraudDataGenerator
-from hf_core_lab.exceptions import InferenceError, ValidationError
+from hf_core_lab.exceptions import InferenceError
 from hf_core_lab.models.explainability import FeatureExplainer
 from hf_core_lab.models.fraud_risk import FraudRiskClassifier
 

@@ -2,7 +2,7 @@
 Hub Discovery Engine for searching models, datasets, and Spaces.
 """
 
-from typing import List, Optional
+
 from huggingface_hub import HfApi
 
 from hf_core_lab.config import LabConfig
@@ -16,19 +16,19 @@ logger = setup_logger("hf_core_lab.hub.discovery")
 class HubDiscoveryEngine:
     """Engine for searching models, datasets, and Spaces on Hugging Face Hub."""
 
-    def __init__(self, config: Optional[LabConfig] = None, api: Optional[HfApi] = None):
+    def __init__(self, config: LabConfig | None = None, api: HfApi | None = None):
         self.config = config or LabConfig()
         self.api = api or HfApi(token=self.config.token)
 
     def search_models(
         self,
-        query: Optional[str] = None,
-        author: Optional[str] = None,
-        task: Optional[str] = None,
+        query: str | None = None,
+        author: str | None = None,
+        task: str | None = None,
         limit: int = 10,
         sort: str = "downloads",
         direction: int = -1,
-    ) -> List[ModelMetadata]:
+    ) -> list[ModelMetadata]:
         """Search models on the Hub matching parameters."""
         if limit <= 0 or limit > self.config.max_results_limit:
             raise DiscoveryError(f"Limit must be between 1 and {self.config.max_results_limit}.")
@@ -44,7 +44,7 @@ class HubDiscoveryEngine:
                 full=False,
             )
 
-            results: List[ModelMetadata] = []
+            results: list[ModelMetadata] = []
             for item in raw_models:
                 tags = getattr(item, "tags", []) or []
                 results.append(
@@ -67,10 +67,10 @@ class HubDiscoveryEngine:
 
     def search_datasets(
         self,
-        query: Optional[str] = None,
-        author: Optional[str] = None,
+        query: str | None = None,
+        author: str | None = None,
         limit: int = 10,
-    ) -> List[DatasetMetadata]:
+    ) -> list[DatasetMetadata]:
         """Search datasets on the Hub matching parameters."""
         if limit <= 0 or limit > self.config.max_results_limit:
             raise DiscoveryError(f"Limit must be between 1 and {self.config.max_results_limit}.")
@@ -84,7 +84,7 @@ class HubDiscoveryEngine:
                 full=False,
             )
 
-            results: List[DatasetMetadata] = []
+            results: list[DatasetMetadata] = []
             for item in raw_datasets:
                 tags = getattr(item, "tags", []) or []
                 results.append(
@@ -105,10 +105,10 @@ class HubDiscoveryEngine:
 
     def search_spaces(
         self,
-        query: Optional[str] = None,
-        author: Optional[str] = None,
+        query: str | None = None,
+        author: str | None = None,
         limit: int = 10,
-    ) -> List[SpaceMetadata]:
+    ) -> list[SpaceMetadata]:
         """Search Spaces on the Hub matching parameters."""
         if limit <= 0 or limit > self.config.max_results_limit:
             raise DiscoveryError(f"Limit must be between 1 and {self.config.max_results_limit}.")
@@ -121,7 +121,7 @@ class HubDiscoveryEngine:
                 limit=limit,
             )
 
-            results: List[SpaceMetadata] = []
+            results: list[SpaceMetadata] = []
             for item in raw_spaces:
                 tags = getattr(item, "tags", []) or []
                 results.append(

@@ -5,9 +5,9 @@ Implements model training, metric evaluations (Accuracy, Precision, Recall, F1, 
 CPU inference latency benchmarking, and explainability integration.
 """
 
-from dataclasses import dataclass
 import time
-from typing import Dict, List, Tuple
+from dataclasses import dataclass
+
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
@@ -99,7 +99,7 @@ class FraudRiskClassifier:
             inference_latency_ms=latency_per_item,
         )
 
-    def predict_instance(self, features: Dict[str, float]) -> Tuple[float, ExplanationReport]:
+    def predict_instance(self, features: dict[str, float]) -> tuple[float, ExplanationReport]:
         """Predict risk probability and generate explanation for a single transaction."""
         df_inst = pd.DataFrame([features])
         for col in self.FEATURE_COLS:

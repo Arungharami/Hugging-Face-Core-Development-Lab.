@@ -68,7 +68,7 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "B", "UP"]
-ignore = []
+ignore = ["E501", "N806", "E402"]
 
 [tool.coverage.run]
 source = ["src/hf_core_lab"]

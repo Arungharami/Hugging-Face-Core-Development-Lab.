@@ -3,6 +3,7 @@ Unit tests for HfHubClient API wrapper with mocked network responses.
 """
 
 from unittest.mock import MagicMock
+
 import pytest
 from huggingface_hub.utils import HfHubHTTPError
 from requests.models import Response

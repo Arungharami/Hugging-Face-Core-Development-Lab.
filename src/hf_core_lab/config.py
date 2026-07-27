@@ -4,14 +4,13 @@ Configuration management for Hugging Face Core Development Lab.
 
 import os
 from dataclasses import dataclass, field
-from typing import Optional
 
 
 @dataclass
 class LabConfig:
     """Configuration settings for Hugging Face Core Development Lab operations."""
 
-    token: Optional[str] = field(
+    token: str | None = field(
         default_factory=lambda: os.getenv("HF_TOKEN")
     )
     username: str = field(
@@ -22,7 +21,7 @@ class LabConfig:
     )
     request_timeout: int = 30
     max_results_limit: int = 100
-    cache_dir: Optional[str] = field(
+    cache_dir: str | None = field(
         default_factory=lambda: os.getenv("HF_HOME")
     )
 

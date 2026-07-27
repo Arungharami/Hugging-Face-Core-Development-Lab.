@@ -2,7 +2,7 @@
 Repository operations helper module.
 """
 
-from typing import Optional
+
 from huggingface_hub import HfApi
 
 from hf_core_lab.config import LabConfig
@@ -15,7 +15,7 @@ logger = setup_logger("hf_core_lab.hub.repositories")
 class RepositoryManager:
     """Manager for creating, downloading, and uploading repository files."""
 
-    def __init__(self, config: Optional[LabConfig] = None, api: Optional[HfApi] = None):
+    def __init__(self, config: LabConfig | None = None, api: HfApi | None = None):
         self.config = config or LabConfig()
         self.api = api or HfApi(token=self.config.token)
 

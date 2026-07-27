@@ -3,6 +3,7 @@ Unit tests for RepositoryManager.
 """
 
 from unittest.mock import MagicMock
+
 import pytest
 
 from hf_core_lab.exceptions import HubConnectionError

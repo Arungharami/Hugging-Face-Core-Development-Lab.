@@ -3,7 +3,7 @@ Dataclasses and schemas for Hub resources and search results.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -11,17 +11,17 @@ class ModelMetadata:
     """Structured metadata for a Hugging Face Model repository."""
 
     model_id: str
-    author: Optional[str] = None
+    author: str | None = None
     downloads: int = 0
     likes: int = 0
-    tags: List[str] = field(default_factory=list)
-    pipeline_tag: Optional[str] = None
-    library_name: Optional[str] = None
-    license: Optional[str] = None
-    last_modified: Optional[str] = None
-    sha: Optional[str] = None
+    tags: list[str] = field(default_factory=list)
+    pipeline_tag: str | None = None
+    library_name: str | None = None
+    license: str | None = None
+    last_modified: str | None = None
+    sha: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert metadata to dictionary representation."""
         return {
             "model_id": self.model_id,
@@ -42,15 +42,15 @@ class DatasetMetadata:
     """Structured metadata for a Hugging Face Dataset repository."""
 
     dataset_id: str
-    author: Optional[str] = None
+    author: str | None = None
     downloads: int = 0
     likes: int = 0
-    tags: List[str] = field(default_factory=list)
-    description: Optional[str] = None
-    license: Optional[str] = None
-    last_modified: Optional[str] = None
+    tags: list[str] = field(default_factory=list)
+    description: str | None = None
+    license: str | None = None
+    last_modified: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert metadata to dictionary representation."""
         return {
             "dataset_id": self.dataset_id,
@@ -69,13 +69,13 @@ class SpaceMetadata:
     """Structured metadata for a Hugging Face Space repository."""
 
     space_id: str
-    author: Optional[str] = None
-    sdk: Optional[str] = None
+    author: str | None = None
+    sdk: str | None = None
     likes: int = 0
-    tags: List[str] = field(default_factory=list)
-    last_modified: Optional[str] = None
+    tags: list[str] = field(default_factory=list)
+    last_modified: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert metadata to dictionary representation."""
         return {
             "space_id": self.space_id,
@@ -94,10 +94,10 @@ class CardValidationResult:
     repo_id: str
     repo_type: str  # "model" or "dataset"
     is_valid: bool
-    missing_fields: List[str] = field(default_factory=list)
-    warnings: List[str] = field(default_factory=list)
+    missing_fields: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert validation result to dictionary representation."""
         return {
             "repo_id": self.repo_id,
