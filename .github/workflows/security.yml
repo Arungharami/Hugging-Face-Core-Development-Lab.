@@ -1,0 +1,18 @@
+name: Security & Secret Scanning
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secret Leak Scan
+        run: |
+          echo "Scanning repository for accidental token or key leaks..."
+          ! grep -rE "(hf_[A-Za-z0-9]{32,})" . --exclude-dir={.git,.venv,htmlcov}
